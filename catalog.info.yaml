@@ -1,0 +1,13 @@
+apiVersion: Backstage.io/v1alpha1
+kind: Component
+metadata:
+  description: R48 ASN at PO Delivery Schedule Line Level (v3 flow) — clickable HTML prototype (CSP Orders, Draft ASN, ASN Delivery Schedule card, Manage PO Lines add/delete). Static design prototype, not production code.
+  labels:
+    jiraComponents: UX
+    jiraDevTeam: UX
+    jiraProject: CD
+    sastTool: None
+  name: asn-delivery-schedule-v3-prototype
+spec:
+  lifecycle: experimental
+  type: website
