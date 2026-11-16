@@ -337,7 +337,7 @@
       case 'mTab': S.modal.tab = k; S.modal.sel = {}; save(); render(); break;
       case 'mSel': { const s = S.modal.sel; if (el.checked) s[k] = true; else delete s[k]; save(); render(); break; }
       case 'mAll': { const ids = [...document.querySelectorAll('table.mt tbody [data-a="mSel"]')].map(x => x.dataset.k); S.modal.sel = {}; if (el.checked) ids.forEach(i => { S.modal.sel[i] = true; }); save(); render(); break; }
-      case 'mAdd': { const keys = Object.keys(S.modal.sel); const add = D.addable.filter(l => keys.includes(lkey(l))); S.draft.lines.push(...add.map(mkLine)); S.modal.sel = {}; S.modal.tab = 'added'; save(); render(); toast(`${add.length} PO line${add.length === 1 ? '' : 's'} added to the ASN`); break; }
+      case 'mAdd': { const keys = Object.keys(S.modal.sel); const add = D.addable.filter(l => keys.includes(lkey(l))); S.draft.lines.push(...add.map(mkLine)); S.modal = null; save(); render(); toast(`${add.length} PO line${add.length === 1 ? '' : 's'} added to the ASN`); break; }
       case 'mDel': S.confirm = { ids: Object.keys(S.modal.sel), from: 'modal' }; save(); render(); break;
       case 'cfNo': S.confirm = null; save(); render(); break;
       case 'cfOk': deleteLines(S.confirm.ids); if (S.modal) S.modal.sel = {}; S.confirm = null; save(); render(); break;
