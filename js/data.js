@@ -56,5 +56,4 @@ window.DATA = {
     ['CMIPO8', 2, 500, 'Each', 'Lenovo ThinkPad T61', 500000, '07/06/2026', '11/29/2026'],
   ].map(([po, line, qty, uom, item, price, orderDate, needBy], i) => ({ po, line, qty, uom, item, price, orderDate, needBy, spn: 'INP' + (7000 + i), aux: 'INAPM' + (7000 + i), sch: [] })),
 
-  reasons: ['Partial shipment', 'Split shipment', 'Early shipment', 'Late shipment', 'Other'],
 };

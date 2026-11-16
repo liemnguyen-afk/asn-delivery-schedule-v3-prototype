@@ -22,7 +22,7 @@
   let menuOpen = false, toastT = null;
   const toast = msg => { let t = document.querySelector('.toast'); if (!t) { t = document.createElement('div'); t.className = 'toast'; document.body.appendChild(t); } t.textContent = msg; clearTimeout(toastT); toastT = setTimeout(() => t.remove(), 2600); };
 
-  const mkLine = src => ({ id: 'L' + (S.seq++), po: src.po, line: src.line, item: src.item, poQty: src.qty, uom: src.uom, needBy: src.needBy, spn: src.spn, aux: src.aux, price: src.price, orderDate: src.orderDate, sch: src.sch || [], qty: q4(src.qty), asnSch: [], reason: '', comment: '' });
+  const mkLine = src => ({ id: 'L' + (S.seq++), po: src.po, line: src.line, item: src.item, poQty: src.qty, uom: src.uom, needBy: src.needBy, spn: src.spn, aux: src.aux, price: src.price, orderDate: src.orderDate, sch: src.sch || [], qty: q4(src.qty), asnSch: [] });
   function linesForPo(po) {
     const detailed = Object.values(D.poLines).filter(l => l.po === po);
     if (detailed.length) return detailed;
@@ -149,7 +149,7 @@
   // ---------------------------------------------------------------- ASN Delivery Schedule panel
   function openPanel(l) {
     const picked = Object.fromEntries(l.asnSch.map(s => [s.n, s]));
-    S.panel = { lineId: l.id, rows: l.sch.map(s => ({ n: s.n, needBy: s.needBy, open: s.qty, qty: picked[s.n] ? String(picked[s.n].qty) : String(s.qty), on: !!picked[s.n] })), reason: l.reason, comment: l.comment, err: {} };
+    S.panel = { lineId: l.id, rows: l.sch.map(s => ({ n: s.n, needBy: s.needBy, open: s.qty, qty: picked[s.n] ? String(picked[s.n].qty) : String(s.qty), on: !!picked[s.n] })), err: {} };
   }
   const panelTotal = () => S.panel.rows.filter(r => r.on).reduce((t, r) => t + (num(r.qty) || 0), 0);
   function vSchedules(l) {
@@ -172,10 +172,7 @@
         </div>
       </div>
       <div class="sch-act">
-        <div class="fld"><span class="fl2"><span class="rq">*</span>Reason</span>
-          <span class="c2sel"><select data-f="pr" class="${p.reason ? '' : 'ph'} ${p.err.reason ? 'err' : ''}"><option value="">Select</option>${D.reasons.map(r => `<option ${r === p.reason ? 'selected' : ''}>${r}</option>`).join('')}</select>${img('arrow-dropdown.svg', 24, 24)}</span>
-          <span class="c2err">${p.err.reason || p.err.rows || ''}</span></div>
-        <div class="fld"><span class="fl2">Comments</span><input class="c2inp" data-f="pc" placeholder="Placeholder" value="${esc(p.comment)}"></div>
+        <span class="c2err">${p.err.rows || ''}</span>
         <span class="sp"></span>
         <button class="c2btn ghost" data-a="schCancel">Cancel</button>
         <button class="c2btn pri" data-a="schSave" ${nOn ? '' : 'disabled'}>Save</button>
@@ -187,11 +184,10 @@
     const on = p.rows.filter(r => r.on);
     for (const r of on) { const v = num(r.qty); if (!(v > 0)) err['r' + r.n] = 'Enter a quantity greater than 0'; else if (v > r.open) err['r' + r.n] = `Exceeds the schedule line quantity (${r.open})`; }
     if (Object.keys(err).length) err.rows = 'Fix the highlighted quantities';
-    if (!p.reason) err.reason = 'Select a reason';
     p.err = err;
     if (Object.keys(err).length) { save(); render(); return; }
     l.asnSch = on.map(r => ({ n: r.n, qty: num(r.qty), needBy: r.needBy }));
-    l.reason = p.reason; l.comment = p.comment; l.qty = q4(panelTotal());
+    l.qty = q4(panelTotal());
     delete S.errors['q' + l.id];
     S.panel = null; save(); render();
     toast(`${on.length} delivery schedule${on.length === 1 ? '' : 's'} added to ASN line ${S.draft.lines.indexOf(l) + 1}`);
@@ -288,7 +284,7 @@
     newDraft('3627'); const l = S.draft.lines[0];
     if (k === 'delivery') S.ds[l.id] = true;
     if (k === 'schedules' || k === 'selected') { openPanel(l); if (k === 'selected') { for (const r of S.panel.rows) r.on = [1, 2, 3, 5].includes(r.n); } }
-    if (k === 'added' || k.startsWith('manage')) { l.asnSch = [1, 2, 3, 4].map(n => ({ n, qty: 10, needBy: l.sch[n - 1].needBy })); l.reason = 'Partial shipment'; l.qty = q4(40); }
+    if (k === 'added' || k.startsWith('manage')) { l.asnSch = [1, 2, 3, 4].map(n => ({ n, qty: 10, needBy: l.sch[n - 1].needBy })); l.qty = q4(40); }
     if (k === 'manage-add') S.modal = { tab: 'add', sel: {}, q: '' };
     if (k === 'manage-lines') S.modal = { tab: 'added', sel: {}, q: '' };
     if (k === 'manage-delete' || k === 'manage-confirm') S.modal = { tab: 'added', sel: Object.fromEntries(S.draft.lines.map(x => [x.id, true])), q: '' };
@@ -356,12 +352,10 @@
     if (f.startsWith('d.')) { S.draft[f.slice(2)] = t.value; save(); return; }
     if (f.startsWith('q.')) { lineById(f.slice(2)).qty = t.value; save(); return; }
     if (f.startsWith('sq.')) { const r = S.panel.rows.find(r => r.n === +f.slice(3)); r.qty = t.value; t.classList.remove('err'); const tot = document.getElementById('schtot'); if (tot) tot.textContent = fmt(panelTotal()); save(); return; }
-    if (f === 'pc') { S.panel.comment = t.value; save(); return; }
     if (f === 'mq') { S.modal.q = t.value; save(); const pos = t.selectionStart; render(); const nn = document.querySelector('[data-f="mq"]'); if (nn) { nn.focus(); nn.setSelectionRange(pos, pos); } return; }
   });
   document.addEventListener('change', e => {
     const t = e.target;
-    if (t.dataset.f === 'pr') { S.panel.reason = t.value; delete S.panel.err.reason; save(); render(); }
   });
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;

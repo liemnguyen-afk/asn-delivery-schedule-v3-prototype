@@ -85,7 +85,7 @@ body { font-size: 13px; color: #2f2f2f; }
 .trash:hover { background: #fdecec; }
 .trash img { width: 24px; height: 24px; }
 .sch-empty { padding: 20px 16px; color: #6b7785; font-size: 14px; }
-.sch-act { display: flex; align-items: flex-end; gap: 12px; padding: 20px 4px 4px; }
+.sch-act { display: flex; align-items: center; gap: 12px; padding: 16px 4px 4px; }
 .sch-act .fld { display: flex; flex-direction: column; gap: 6px; }
 .sch-act .fl2 { font-size: 13px; color: #1b1f28; font-weight: 600; }
 .sch-act .fl2 .rq { color: #d12d2d; margin-right: 2px; }
@@ -96,7 +96,7 @@ body { font-size: 13px; color: #2f2f2f; }
 .c2sel img { position: absolute; right: 6px; top: 4px; width: 24px; height: 24px; pointer-events: none; }
 .c2inp { width: 205px; height: 32px; border: 1px solid #d5dee7; border-radius: 10px; padding: 0 12px; font: 400 13px "Nunito Sans", sans-serif; color: #2f2f2f; outline: 0; }
 .c2inp:focus, .c2sel select:focus { border-color: #0c65e1; }
-.c2err { color: #d12d2d; font-size: 12px; height: 0; overflow: visible; white-space: nowrap; }
+.c2err { color: #d12d2d; font-size: 13px; font-family: "Nunito Sans", sans-serif; white-space: nowrap; }
 .c2btn { height: 32px; padding: 0 14px; border-radius: 10px; font: 600 13px "Nunito Sans", sans-serif; cursor: pointer; border: 0; }
 .c2btn.ghost { background: transparent; color: #0c65e1; }
 .c2btn.ghost:hover { background: #eef4fd; }
