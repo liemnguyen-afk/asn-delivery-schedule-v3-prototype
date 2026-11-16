@@ -10,6 +10,7 @@ Or open `index.html` locally (no build step). It starts on the Orders page.
 | --- | --- |
 | CSP - OP Flip to ASN | Orders table. The Create ASN icon on PO 3627 creates the draft (other POs work too, without schedules). |
 | Draft ASN | Create Advance Ship Notice with 2 lines. Line 1 has 8 delivery schedule lines, line 2 has none. |
+| Delivery Schedules (read-only) | Click the **Delivery Schedules** count or its arrow to open the read-only Delivery Schedules card (Figma `213:99588`): Reference ID, External ID, Quantity, Need By Date, Initiated By, and a Total row. Click again to close. |
 | ASN Delivery Schedules | Click the **ASN Delivery Schedules** count or the arrow to open the ASN Delivery Schedule card. Select rows (header checkbox = all), edit ASN Shipped Quantity, delete rows with the trash icon. Total sums the selected rows. Save stays disabled until a row is selected. Reason is required, and each qty must be > 0 and ≤ the schedule line qty. |
 | ASN Delivery Schedules added | Save closes the card. The count turns bold (e.g. 4) and Shipped Qty becomes the total. |
 | Manage - Add PO Lines | **Manage / Add PO line #** opens the modal. Check lines, then **Add to ASN**. |

@@ -10,8 +10,8 @@ window.DATA = {
   poLines: {
     '3627-1': { po: '3627', line: 1, item: 'Dell Laptop High End Model', qty: 100, uom: 'Each', needBy: '12/15/2026', spn: 'INP5671', aux: 'INAPM5671', price: 4000, orderDate: '11/02/2026',
       sch: [
-        { n: 1, qty: 10, needBy: '11/15/2026' }, { n: 2, qty: 10, needBy: '11/22/2026' }, { n: 3, qty: 10, needBy: '11/29/2026' }, { n: 4, qty: 10, needBy: '12/06/2026' },
-        { n: 5, qty: 10, needBy: '12/13/2026' }, { n: 6, qty: 10, needBy: '12/20/2026' }, { n: 7, qty: 10, needBy: '12/27/2026' }, { n: 8, qty: 10, needBy: '01/03/2027' },
+        { n: 1, qty: 10, needBy: '11/15/2026', ref: '20508', ext: '', by: 'Buyer' }, { n: 2, qty: 10, needBy: '11/22/2026', ref: '20507', ext: '', by: 'Buyer' }, { n: 3, qty: 10, needBy: '11/29/2026', ref: '20506', ext: '', by: 'Buyer' }, { n: 4, qty: 10, needBy: '12/06/2026', ref: '20505', ext: '', by: 'Buyer' },
+        { n: 5, qty: 10, needBy: '12/13/2026', ref: '20504', ext: '', by: 'Buyer' }, { n: 6, qty: 10, needBy: '12/20/2026', ref: '20503', ext: '', by: 'Buyer' }, { n: 7, qty: 10, needBy: '12/27/2026', ref: '20502', ext: '', by: 'Buyer' }, { n: 8, qty: 10, needBy: '01/03/2027', ref: '20501', ext: '', by: 'Buyer' },
       ] },
     '3627-2': { po: '3627', line: 2, item: 'Wireless Keyboard and Mouse', qty: 12, uom: 'Box', needBy: '11/30/2026', spn: 'INP5678', aux: 'INAPM5678', price: 600, orderDate: '11/02/2026', sch: [] },
   },

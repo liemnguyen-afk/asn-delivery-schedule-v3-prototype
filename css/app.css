@@ -135,3 +135,15 @@ table.mt .cbcol { width: 20px; padding-right: 0; }
 .cfm .btn { width: 105px; justify-content: center; height: 28px; }
 .cfm .btn.primary { background: #2a7fc4; border-color: #2a7fc4; }
 .empty { padding: 20px; text-align: center; color: #888; }
+
+/* ---------- Delivery Schedules (read-only PO schedule lines, Figma 213:99888) ---------- */
+.sch-wrap.ro .sch-row > div { font-size: 14px; letter-spacing: .17px; color: #1b1f28; }
+.sch-wrap.ro .sch-head > div { font-weight: 500; color: rgba(0, 0, 0, .87); }
+.sch-row .c-ref, .sch-row .c-ext { width: 170px; }
+.sch-row .c-qty { width: 130px; }
+.sch-row .c-nb { width: 214px; }
+.sch-row .c-ini { flex: 1; min-width: 170px; }
+.sch-wrap.ro .c-ext .none { color: #757575; }
+.sch-wrap.ro .sch-tot > div { background: #f6f6f6; border-bottom: 0; }
+.sch-wrap.ro .sch-tot .lab2 { padding-left: 47px; white-space: nowrap; overflow: visible; }
+.sch-wrap.ro .sch-tot .lab2 b { font-weight: 600; }

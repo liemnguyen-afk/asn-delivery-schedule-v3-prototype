@@ -14,9 +14,10 @@
   const price = n => Number(n).toFixed(2);
 
   // ---------------------------------------------------------------- state
-  const fresh = () => ({ draft: null, panel: null, modal: null, confirm: null, banner: null, errors: {}, seq: 1 });
+  const fresh = () => ({ draft: null, ds: {}, panel: null, modal: null, confirm: null, banner: null, errors: {}, seq: 1 });
   let S;
   try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || 'null') || {}); } catch (e) { S = fresh(); }
+  S.ds = S.ds || {};
   const save = () => localStorage.setItem(KEY, JSON.stringify(S));
   let menuOpen = false, toastT = null;
   const toast = msg => { let t = document.querySelector('.toast'); if (!t) { t = document.createElement('div'); t.className = 'toast'; document.body.appendChild(t); } t.textContent = msg; clearTimeout(toastT); toastT = setTimeout(() => t.remove(), 2600); };
@@ -28,7 +29,7 @@
     const o = D.orders.find(o => o.po === po);
     return o.items.map((t, i) => { const m = t.match(/^(\d[\d,]*) (\w+) of (.+)$/); return { po, line: i + 1, qty: m ? +m[1].replace(/,/g, '') : 1, uom: m ? m[2] : 'Each', item: m ? m[3] : t, needBy: '12/15/2026', spn: 'INP' + po + i, aux: 'INAPM' + po + i, price: 100, orderDate: o.date, sch: [] }; });
   }
-  function newDraft(po) { S.draft = { asnNo: '', fromPo: po, lines: [] }; S.draft.lines = linesForPo(po).map(mkLine); S.panel = null; S.modal = null; S.confirm = null; S.errors = {}; }
+  function newDraft(po) { S.ds = {}; S.draft = { asnNo: '', fromPo: po, lines: [] }; S.draft.lines = linesForPo(po).map(mkLine); S.panel = null; S.modal = null; S.confirm = null; S.errors = {}; }
   const lineById = id => S.draft && S.draft.lines.find(l => l.id === id);
 
   // ---------------------------------------------------------------- shell
@@ -96,7 +97,7 @@
       const hasS = l.sch.length > 0; const n = l.asnSch.length;
       const schRow = hasS
         ? `<div class="lrow"><div class="ind"></div>
-            <div class="f w188"><div class="l">Delivery Schedules</div><span class="lnk2" data-a="sch" data-id="${l.id}">${l.sch.length}</span></div>
+            <div class="f w188"><div class="l">Delivery Schedules</div><span class="sval"><span class="lnk2" data-a="ds" data-id="${l.id}">${l.sch.length}</span><span class="stog ${S.ds[l.id] ? 'open' : ''}" data-a="ds" data-id="${l.id}" title="${S.ds[l.id] ? 'Hide' : 'Show'} delivery schedules">${img('arrow-grey-right.svg', 8, 14)}</span></span></div>
             <div class="f w154"><div class="l">Schedule Line Need By</div>${l.sch[0].needBy}</div>
             <div class="f" style="width:240px"><div class="l">ASN Delivery Schedules</div><span class="sval"><span class="lnk2 ${n ? 'b' : ''}" data-a="sch" data-id="${l.id}">${n}</span><span class="stog ${open ? 'open' : ''}" data-a="sch" data-id="${l.id}" title="${open ? 'Hide' : 'Show'} ASN delivery schedule">${img('arrow-grey-right.svg', 8, 14)}</span></span></div></div>`
         : `<div class="lrow"><div class="ind"></div>
@@ -118,6 +119,7 @@
           <div class="f w154"><div class="l">Po Line Quantity</div>${q1(l.poQty)}</div>
           <div class="f w154"><div class="l">PO Line Need By</div>${none(l.needBy)}</div></div>
         ${schRow}
+        ${hasS && S.ds[l.id] ? vDeliverySchedules(l) : ''}
         ${open ? vSchedules(l) : ''}
         <div class="lrow"><div class="ind"></div>
           <div class="f w188"><div class="l">Invoice Num Reference</div></div><div class="f w159"><div class="l">Invoice</div></div><div class="f w156"><div class="l">Invoice Line</div></div><div class="f w154"><div class="l">Invoice Line Qty</div></div>
@@ -164,7 +166,7 @@
         <div class="sch-title">ASN Delivery Schedule</div>
         <div class="sch-t">
           <div class="sch-row sch-head"><div class="c-cb">${cb(all, 'schAll')}</div><div class="c-n">#</div><div class="c-q">ASN Shipped Quantity</div><div class="c-d">Need By Date</div><div class="c-a">Actions</div><div class="c-g"></div></div>
-          ${rows.length ? `<div class="sch-body"><div class="sch-vp" id="schvp">${body}</div><div class="sch-sb"><div class="th"></div></div></div>`
+          ${rows.length ? `<div class="sch-body"><div class="sch-vp" data-vp="asn-${l.id}">${body}</div><div class="sch-sb"><div class="th"></div></div></div>`
             : `<div class="sch-empty">All schedule lines were removed. Click Cancel to start again.</div>`}
           <div class="sch-row sch-tot"><div class="lab"><span><b>Total</b> (All Schedules)</span></div><div class="val" id="schtot">${fmt(panelTotal())}</div><div class="c-g"></div></div>
         </div>
@@ -194,8 +196,24 @@
     S.panel = null; save(); render();
     toast(`${on.length} delivery schedule${on.length === 1 ? '' : 's'} added to ASN line ${S.draft.lines.indexOf(l) + 1}`);
   }
-  function syncScroll() {
-    const vp = document.getElementById('schvp'); if (!vp) return;
+  // ---------------------------------------------------------------- Delivery Schedules (read-only, PO schedule lines)
+  function vDeliverySchedules(l) {
+    const rows = l.sch.map(s => `<div class="sch-row">
+        <div class="c-ref">${s.ref}</div><div class="c-ext"><span class="none">${none(s.ext)}</span></div><div class="c-qty">${fmt(s.qty)}</div>
+        <div class="c-nb">${s.needBy}</div><div class="c-ini">${esc(s.by)}</div></div>`).join('');
+    return `<div class="sch-wrap ro">
+      <div class="sch-card">
+        <div class="sch-title">Delivery Schedules</div>
+        <div class="sch-t">
+          <div class="sch-row sch-head"><div class="c-ref">Reference ID</div><div class="c-ext">External ID</div><div class="c-qty">Quantity</div><div class="c-nb">Need By Date</div><div class="c-ini">Initiated By</div><div class="c-g"></div></div>
+          <div class="sch-body"><div class="sch-vp" data-vp="ds-${l.id}">${rows}</div><div class="sch-sb"><div class="th"></div></div></div>
+          <div class="sch-row sch-tot"><div class="c-ref lab2"><span><b>Total</b> (All Schedules)</span></div><div class="c-ext"></div><div class="c-qty">${fmt(l.sch.reduce((t, s) => t + s.qty, 0))}</div><div class="c-nb"></div><div class="c-ini"></div><div class="c-g"></div></div>
+        </div>
+      </div>
+    </div>`;
+  }
+  function syncScroll(vp) {
+    if (!vp) return;
     const th = vp.parentElement.querySelector('.th'); const track = vp.clientHeight - 4;
     const ratio = vp.clientHeight / vp.scrollHeight;
     if (ratio >= 1) { th.style.display = 'none'; return; }
@@ -259,7 +277,7 @@
 
   // ---------------------------------------------------------------- prototype menu
   const SCREENS = [
-    ['CSP - OP Flip to ASN (Orders)', '#/orders'], ['Draft ASN', '#/proto/draft'], ['ASN Delivery Schedules (open)', '#/proto/schedules'],
+    ['CSP - OP Flip to ASN (Orders)', '#/orders'], ['Draft ASN', '#/proto/draft'], ['Delivery Schedules (read-only)', '#/proto/delivery'], ['ASN Delivery Schedules (open)', '#/proto/schedules'],
     ['ASN Delivery Schedules (4 selected)', '#/proto/selected'], ['ASN Delivery Schedules added', '#/proto/added'],
     ['Manage - Add PO Lines', '#/proto/manage-add'], ['Manage - PO Lines', '#/proto/manage-lines'], ['Manage - Delete PO Lines', '#/proto/manage-delete'], ['Manage - Confirm delete', '#/proto/manage-confirm'],
   ];
@@ -268,6 +286,7 @@
     <hr><div class="i" data-a="go" data-to="#/proto/reset">Reset prototype</div></div>` : ''}</div>`;
   function protoState(k) {
     newDraft('3627'); const l = S.draft.lines[0];
+    if (k === 'delivery') S.ds[l.id] = true;
     if (k === 'schedules' || k === 'selected') { openPanel(l); if (k === 'selected') { for (const r of S.panel.rows) r.on = [1, 2, 3, 5].includes(r.n); } }
     if (k === 'added' || k.startsWith('manage')) { l.asnSch = [1, 2, 3, 4].map(n => ({ n, qty: 10, needBy: l.sch[n - 1].needBy })); l.reason = 'Partial shipment'; l.qty = q4(40); }
     if (k === 'manage-add') S.modal = { tab: 'add', sel: {}, q: '' };
@@ -280,7 +299,7 @@
   // ---------------------------------------------------------------- render / router
   function render() {
     const h = location.hash || '#/orders';
-    const vp = document.getElementById('schvp'); const vpTop = vp ? vp.scrollTop : 0;
+    const vpTop = {}; document.querySelectorAll('.sch-vp').forEach(v => { vpTop[v.dataset.vp] = v.scrollTop; });
     const m = h.match(/^#\/([\w-]+)\/?([\w-]*)/) || [];
     let html;
     if (m[1] === 'proto') {
@@ -290,7 +309,7 @@
     if (m[1] === 'asn') html = vDraft() + (S.draft ? vManage() + vConfirm() : '');
     else html = vOrders();
     $app.innerHTML = html + vProto();
-    const nvp = document.getElementById('schvp'); if (nvp) { nvp.scrollTop = vpTop; nvp.addEventListener('scroll', syncScroll); syncScroll(); }
+    document.querySelectorAll('.sch-vp').forEach(v => { v.scrollTop = vpTop[v.dataset.vp] || 0; v.addEventListener('scroll', () => syncScroll(v)); syncScroll(v); });
   }
   window.addEventListener('hashchange', () => { if (!/^#\/orders/.test(location.hash)) S.banner = null; S.errors = {}; save(); render(); window.scrollTo(0, 0); });
 
@@ -307,6 +326,7 @@
       case 'dismiss': S.banner = null; save(); render(); break;
       case 'flip': newDraft(el.dataset.po); save(); location.hash = '#/asn'; break;
       // schedules
+      case 'ds': if (S.ds[id]) delete S.ds[id]; else S.ds[id] = true; save(); render(); break;
       case 'sch': { if (p && p.lineId === id) S.panel = null; else openPanel(lineById(id)); save(); render(); break; }
       case 'schRow': { const r = p.rows.find(r => r.n === n); r.on = !r.on; delete p.err['r' + n]; save(); render(); break; }
       case 'schAll': { const all = p.rows.every(r => r.on); p.rows.forEach(r => { r.on = !all; }); save(); render(); break; }
