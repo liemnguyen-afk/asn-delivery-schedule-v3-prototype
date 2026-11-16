@@ -326,8 +326,9 @@
       case 'dismiss': S.banner = null; save(); render(); break;
       case 'flip': newDraft(el.dataset.po); save(); location.hash = '#/asn'; break;
       // schedules
-      case 'ds': if (S.ds[id]) delete S.ds[id]; else S.ds[id] = true; save(); render(); break;
-      case 'sch': { if (p && p.lineId === id) S.panel = null; else openPanel(lineById(id)); save(); render(); break; }
+      // only one in-line table per line: opening one closes the other
+      case 'ds': if (S.ds[id]) delete S.ds[id]; else { S.ds[id] = true; if (p && p.lineId === id) S.panel = null; } save(); render(); break;
+      case 'sch': { if (p && p.lineId === id) S.panel = null; else { delete S.ds[id]; openPanel(lineById(id)); } save(); render(); break; }
       case 'schRow': { const r = p.rows.find(r => r.n === n); r.on = !r.on; delete p.err['r' + n]; save(); render(); break; }
       case 'schAll': { const all = p.rows.every(r => r.on); p.rows.forEach(r => { r.on = !all; }); save(); render(); break; }
       case 'schDel': p.rows = p.rows.filter(r => r.n !== n); delete p.err['r' + n]; save(); render(); break;
