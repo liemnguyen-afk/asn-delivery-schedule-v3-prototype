@@ -1,0 +1,55 @@
+.gitignore
+  s_9f086ef3405730::t_357689fee3b0d0 1
+README.md
+  s_9f086ef3405730::t_83cc3616bb4068 1-21
+assets/arrow-down-outline.svg
+  s_9f086ef3405730::t_9b9113c4eaeb88 1-5
+assets/arrow-dropdown.svg
+  s_9f086ef3405730::t_0c4fc977ad8972 1-5
+assets/arrow-grey-right.svg
+  s_9f086ef3405730::t_496cc3277b6df0 1-5
+assets/checkbox-checked.svg
+  s_9f086ef3405730::t_0d52f57d9fcd3b 1-5
+assets/checkbox-empty.svg
+  s_9f086ef3405730::t_c534ae0c4ecfc0 1-5
+assets/delete-line.svg
+  s_9f086ef3405730::t_121d858d11fc81 1-6
+assets/h-info.svg
+  s_9f086ef3405730::t_5abde96a8e4c8e 1-7
+assets/h-lines.svg
+  s_9f086ef3405730::t_5b1e43d34983ac 1-8
+assets/h-shipment.svg
+  s_9f086ef3405730::t_19bc032c35158a 1-8
+assets/trash-outline.svg
+  s_9f086ef3405730::t_de66bfa0fabaf7 1-5
+catalog.info.yaml
+  s_9f086ef3405730::t_475f64a2ed98e7 1-13
+css/app.css
+  s_9f086ef3405730::t_d0a28076ed6cef 1-137
+css/base.css
+  s_9f086ef3405730::t_1c0331a2a44d72 1-211
+js/icons.js
+  s_9f086ef3405730::t_1f195b4377ff45 1-35
+index.html
+  s_9f086ef3405730::t_a524b7ec147059 1-18
+js/app.js
+  s_9f086ef3405730::t_ca1361b903af92 1-353
+js/data.js
+  s_9f086ef3405730::t_c089e1d9301162 1-60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9675e54bdb40d83a93acbdea94f3270c17198a02",
+  "prompts": {},
+  "sessions": {
+    "s_9f086ef3405730": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "68ff3989-27b5-43b5-9454-09e2d762c8f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "liemnguyen-afk <301846626+liemnguyen-afk@users.noreply.github.com>"
+    }
+  }
+}
