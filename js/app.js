@@ -163,7 +163,7 @@
         <div class="c-a"><span class="trash" data-a="schDel" data-n="${r.n}" title="Delete schedule line">${img('trash-outline.svg', 24, 24, 'Delete schedule line')}</span></div></div>`).join('');
     return `<div class="sch-wrap">
       <div class="sch-card">
-        <div class="sch-title">ASN Delivery Schedule</div>
+        <div class="sch-title">ASN Delivery Schedules</div>
         <div class="sch-t">
           <div class="sch-row sch-head"><div class="c-cb">${cb(all, 'schAll')}</div><div class="c-n">#</div><div class="c-q">ASN Shipped Quantity</div><div class="c-d">Need By Date</div><div class="c-a">Actions</div><div class="c-g"></div></div>
           ${rows.length ? `<div class="sch-body"><div class="sch-vp" data-vp="asn-${l.id}">${body}</div><div class="sch-sb"><div class="th"></div></div></div>`
