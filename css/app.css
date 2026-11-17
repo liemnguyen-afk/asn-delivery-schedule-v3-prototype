@@ -136,14 +136,49 @@ table.mt .cbcol { width: 20px; padding-right: 0; }
 .cfm .btn.primary { background: #2a7fc4; border-color: #2a7fc4; }
 .empty { padding: 20px; text-align: center; color: #888; }
 
-/* ---------- Delivery Schedules (read-only PO schedule lines, Figma 213:99888) ---------- */
-.sch-wrap.ro .sch-row > div { font-size: 14px; letter-spacing: .17px; color: #1b1f28; }
-.sch-wrap.ro .sch-head > div { font-weight: 500; color: rgba(0, 0, 0, .87); }
-.sch-row .c-ref, .sch-row .c-ext { width: 170px; }
-.sch-row .c-qty { width: 130px; }
-.sch-row .c-nb { width: 214px; }
-.sch-row .c-ini { flex: 1; min-width: 170px; }
-.sch-wrap.ro .c-ext .none { color: #757575; }
-.sch-wrap.ro .sch-tot > div { background: #f6f6f6; border-bottom: 0; }
-.sch-wrap.ro .sch-tot .lab2 { padding-left: 47px; white-space: nowrap; overflow: visible; }
-.sch-wrap.ro .sch-tot .lab2 b { font-weight: 600; }
+/* ---------- Delivery Schedules card (select + Shipped Qty, Figma 213:99588 / 230:135630) ---------- */
+.sch-row .c-ref { width: 150px; }
+.sch-row .c-qt { width: 100px; justify-content: flex-end; }
+.sch-row .c-sh { width: 150px; }
+.sch-row .c-nb { flex: 1; min-width: 150px; }
+.sch-row .c-ini { width: 170px; }
+.sch-wrap .sch-row > div { font-size: 14px; letter-spacing: .17px; color: #1b1f28; }
+.sch-wrap .sch-head > div { font-weight: 500; color: rgba(0, 0, 0, .87); }
+.sch-row.dim > div { color: #1b1f28; }
+.sch-row.done > div { color: #9aa3ad; }
+.sch-tot .lab2 { width: 250px; white-space: nowrap; overflow: visible; }
+.sch-tot .lab2 b { font-weight: 600; }
+.sch-tot .tv { justify-content: flex-start; padding-left: 24px; }
+.sch-row .c-sh .qinp { height: 36px; }
+.cbx.dis { opacity: .35; cursor: not-allowed; }
+.cbx.dis:hover { background: none; }
+.cbmix { width: 18px; height: 18px; border-radius: 3px; background: #0c65e1; position: relative; display: inline-block; }
+.cbmix::after { content: ""; position: absolute; left: 4px; right: 4px; top: 8px; height: 2px; background: #fff; border-radius: 1px; }
+.dsl { font-weight: 400; }
+.dsl b { font-weight: 700; }
+
+/* ---------- Manage PO Lines › Add PO Lines with nested schedule lines (Figma 237:13772) ---------- */
+.modal.mpl.wide { width: 1180px; }
+.mtool.flex { display: flex; align-items: center; gap: 12px; }
+.mtool .msum { font-size: 13px; color: #2f2f2f; }
+.mtool .lnk2 { font-size: 13px; }
+.btn.c1.on { background: linear-gradient(#fafafa, #dcdcdc); border-color: #b8b8b8; color: #222; }
+table.mt.nested tbody tr td, table.mt.sub tbody tr td { background: #fff; }
+table.mt.nested tbody tr.alt td, table.mt.sub tbody tr.alt td { background: #f7f7f7; }
+table.mt.nested tbody tr.sel:not(.nest) td { background: #eef6fe; }
+table.mt.nested td, table.mt.nested th { vertical-align: middle; }
+table.mt .carcol { width: 14px; padding: 0 2px; }
+table.mt .cbx { width: 22px; height: 22px; }
+table.mt .cbx img { width: 16px; height: 16px; }
+table.mt .cbmix { width: 14px; height: 14px; border-radius: 2px; background: #2a8ad8; }
+table.mt .cbmix::after { left: 3px; right: 3px; top: 6px; }
+.car { display: inline-block; cursor: pointer; color: #6b7785; font-size: 12px; transition: transform .12s; width: 12px; text-align: center; }
+.car.open { transform: rotate(90deg); }
+.lnk2.b { font-weight: 700; }
+table.mt.nested tr.nest > td { padding: 4px 8px 8px 45px; border-bottom: 1px solid #e3e3e3; }
+.npanel { background: #e8edf1; border: 1px solid #d5dde4; border-radius: 6px; padding: 6px 12px 8px; }
+table.mt.sub th { background: #f7f7f7; }
+table.mt.sub .pl { padding-left: 24px; }
+table.mt.sub tr.done td { color: #9aa3ad; }
+table.mt.sub tr.done b { color: #9aa3ad; }
+table.c1 tbody tr.mine td, table.c1 tbody tr.mine:nth-child(odd) td { background: #fffbea; }
