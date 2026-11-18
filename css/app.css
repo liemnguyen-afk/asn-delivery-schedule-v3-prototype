@@ -105,7 +105,7 @@ body { font-size: 13px; color: #2f2f2f; }
 .c2btn.pri[disabled] { background: #a9c4ef; cursor: not-allowed; }
 
 /* ---------- Manage PO Lines modal (classic) ---------- */
-.scrim { background: rgba(47, 47, 47, .55); align-items: center; padding: 40px 20px; }
+.scrim { background: rgba(47, 47, 47, .55); align-items: center; padding: 20px; }
 .modal.mpl { width: 1000px; border-radius: 0; }
 .mpl .modal-h, .cfm .modal-h { background: #268ecd; font-size: 18px; padding: 6px 12px; height: 35px; }
 .mpl .modal-h .x img, .cfm .modal-h .x img { width: 20px; height: 20px; }
@@ -158,7 +158,13 @@ table.mt .cbcol { width: 20px; padding-right: 0; }
 .dsl b { font-weight: 700; }
 
 /* ---------- Manage PO Lines › Add PO Lines with nested schedule lines (Figma 237:13772) ---------- */
-.modal.mpl.wide { width: 1180px; }
+.modal.mpl.wide { width: 1180px; display: flex; flex-direction: column; max-height: calc(100vh - 40px); }
+.modal.mpl.wide .modal-b { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.mscroll { flex: 1; min-height: 160px; overflow: auto; border-bottom: 1px solid #e3e3e3; overscroll-behavior: contain; }
+.mscroll::-webkit-scrollbar { width: 10px; height: 10px; }
+.mscroll::-webkit-scrollbar-thumb { background: #b9c4cf; border-radius: 5px; border: 2px solid #fff; }
+.mscroll::-webkit-scrollbar-track { background: #f2f4f6; }
+table.mt.nested > thead th { position: sticky; top: 0; z-index: 2; box-shadow: inset 0 -1px 0 #e8e8e8; }
 .mtool.flex { display: flex; align-items: center; gap: 12px; }
 .mtool .msum { font-size: 13px; color: #2f2f2f; }
 .mtool .lnk2 { font-size: 13px; }

@@ -270,8 +270,8 @@
     }).join('');
     return `<div class="scrim"><div class="modal mpl wide">${head}<div class="modal-b">
       <div class="mtool flex"><button class="btn c1 ${sm.n ? 'on' : ''}" data-a="mAdd" ${sm.n || sm.drops ? '' : 'disabled'}>Add to ASN</button><span class="msum">${sm.n || sm.drops ? esc(sm.text) : 'Select PO lines or schedule lines to add to the ASN'}</span><span class="sp"></span><span class="lnk2" data-a="mExpAll">Expand all</span><span class="lnk2" data-a="mColAll">Collapse all</span></div>
-      <table class="mt nested"><thead><tr><th class="cbcol">${cbx(allState, 'mAll')}</th><th class="carcol"></th><th>PO #</th><th>Line #</th><th style="width:22%">Item</th><th>Delivery schedule</th><th class="r">Quantity</th><th class="r">Price</th><th>Order Date</th><th>Need by Date</th><th>Order Confirmation Line Status</th></tr></thead>
-        <tbody>${rows || '<tr><td colspan="11" class="empty">No PO lines match your search.</td></tr>'}</tbody></table>
+      <div class="mscroll" data-keep="manage-add"><table class="mt nested"><thead><tr><th class="cbcol">${cbx(allState, 'mAll')}</th><th class="carcol"></th><th>PO #</th><th>Line #</th><th style="width:22%">Item</th><th>Delivery schedule</th><th class="r">Quantity</th><th class="r">Price</th><th>Order Date</th><th>Need by Date</th><th>Order Confirmation Line Status</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="11" class="empty">No PO lines match your search.</td></tr>'}</tbody></table></div>
       <div class="mpager"><span class="dis">Prev</span><span class="cur">1</span><span>2</span><span>3</span><span>Next</span></div>
     </div></div></div>`;
   }
@@ -520,6 +520,7 @@
   function render() {
     const h = location.hash || '#/orders';
     const vpTop = {}; document.querySelectorAll('.sch-vp').forEach(v => { vpTop[v.dataset.vp] = v.scrollTop; });
+    const keep = {}; document.querySelectorAll('[data-keep]').forEach(v => { keep[v.dataset.keep] = v.scrollTop; });
     const m = h.match(/^#\/([\w-]+)\/?([^/]*)\/?([^/]*)\/?(.*)$/) || [];
     const [, area, a, b, c] = m;
     if (area === 'proto') {
@@ -538,6 +539,7 @@
     } else html = vOrders();
     if (area !== 'buyer') document.title = 'ASN at PO Delivery Schedule Line Level · Coupa Supplier Portal';
     $app.innerHTML = html + vProto();
+    document.querySelectorAll('[data-keep]').forEach(v => { v.scrollTop = keep[v.dataset.keep] || 0; });
     document.querySelectorAll('.sch-vp').forEach(v => { v.scrollTop = vpTop[v.dataset.vp] || 0; v.addEventListener('scroll', () => syncScroll(v)); syncScroll(v); });
   }
   window.addEventListener('hashchange', () => {
