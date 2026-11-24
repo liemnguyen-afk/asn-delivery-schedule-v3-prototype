@@ -23,10 +23,10 @@ Or open `index.html` locally (no build step). It starts on the supplier's Orders
 
 | Figma frame | Route | What you can do |
 | --- | --- | --- |
-| Receive — ASN Lines | `#/buyer/receive` | The submitted ASN comes first (highlighted). **ASN Schedule Line #** shows the line numbers (1, 2, 3…) of the schedules picked on that ASN line, next to **Schedule Line Need By**. Quick Receipts: type a qty or tick *All*, then **Receive**. The box icon opens the detailed receipt. The blue ⟩⟨ button collapses or expands the table. |
-| ASN Detailed Receipt | `#/buyer/receive/detail/…` | Quantity, Action (Receive to inventory needs a Warehouse), and the ASN Line table with ASN Schedule Line #. Submit creates the receipt. |
-| View Receipts | `#/buyer/receipts` | New receipts come first, with ASN Schedule Line #. The Created Date link opens the receipt. |
-| View Receipt | `#/buyer/receipts/<id>` | Receipt details and the PO Line table with ASN Schedule Line #. |
+| Receive — ASN Lines | `#/buyer/receive` | The submitted ASN comes first (highlighted). **PO Schedule Line #** shows the PO delivery schedule line numbers (1, 2, 3…) picked on that ASN line, next to **Schedule Line Need By**. Quick Receipts: type a qty or tick *All*, then **Receive**. The box icon opens the detailed receipt. The blue ⟩⟨ button collapses or expands the table. |
+| ASN Detailed Receipt | `#/buyer/receive/detail/…` | Quantity, Action (Receive to inventory needs a Warehouse), and the ASN Line table with PO Schedule Line #. Submit creates the receipt. |
+| View Receipts | `#/buyer/receipts` | New receipts come first, with PO Schedule Line #. The Created Date link opens the receipt. |
+| View Receipt | `#/buyer/receipts/<id>` | Receipt details and the PO Line table with PO Schedule Line #. |
 
 ## Prototype menu
 
