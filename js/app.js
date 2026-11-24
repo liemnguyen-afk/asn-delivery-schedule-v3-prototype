@@ -329,13 +329,14 @@
   // ================================================================ BUYER: Receive › ASN Lines (222:102218)
   const nums = r => r.refs && r.refs.length ? r.refs.join('<br>') : none();
   const nbs = r => r.needBys && r.needBys.length ? r.needBys.join('<br>') : none();
+  const sqs = r => r.shipQs && r.shipQs.length ? r.shipQs.map(fmt).join('<br>') : none();
   function receiveRows() {
     const mine = [];
     for (const a of S.asns) a.lines.forEach((x, i) => {
       const key = `${a.no}#${i + 1}`;
-      mine.push({ key, asn: a.no, ln: i + 1, item: x.item, po: x.po, poLine: x.line, refs: x.sched.map(s => s.n), needBys: x.sched.map(s => s.needBy), supplier: D.supplierName, qty: x.qty, uom: x.uom, needBy: x.needBy, received: S.rcv[key] || 0, approval: 'No', price: x.price, itemNo: x.itemNo, ordered: x.poQty, mine: true });
+      mine.push({ key, asn: a.no, ln: i + 1, item: x.item, po: x.po, poLine: x.line, refs: x.sched.map(s => s.n), needBys: x.sched.map(s => s.needBy), shipQs: x.sched.map(s => s.qty), supplier: D.supplierName, qty: x.qty, uom: x.uom, needBy: x.needBy, received: S.rcv[key] || 0, approval: 'No', price: x.price, itemNo: x.itemNo, ordered: x.poQty, mine: true });
     });
-    const stat = D.receiveRows.map(r => Object.assign({ key: `${r.asn}#${r.ln}`, refs: [], needBys: [], price: 10, itemNo: 'None', ordered: r.qty }, r, { received: r.received + (S.rcv[`${r.asn}#${r.ln}`] || 0) }));
+    const stat = D.receiveRows.map(r => Object.assign({ key: `${r.asn}#${r.ln}`, refs: [], needBys: [], shipQs: [], price: 10, itemNo: 'None', ordered: r.qty }, r, { received: r.received + (S.rcv[`${r.asn}#${r.ln}`] || 0) }));
     return mine.concat(stat);
   }
   const xToggle = which => `<span class="xtoggle" data-a="xp" data-w="${which}" title="${S.xp[which] ? 'Collapse table' : 'Expand table'}">${S.xp[which] ? I.collapse : I.expand}</span>`;
@@ -343,7 +344,7 @@
     const rows = receiveRows(); const E = S.errors || {};
     const body = rows.map(r => { const open = r.qty - r.received; return `<tr class="${r.mine && S.asns[0] && r.asn === S.asns[0].no ? 'mine' : ''}">
         <td><span class="lnk">${esc(r.asn)}</span></td><td>${r.ln}</td><td>${esc(r.item)}</td><td><span class="lnk">${esc(r.po)}</span></td><td>${r.poLine}</td>
-        <td>${nums(r)}</td><td>${nbs(r)}</td><td></td><td>${none()}</td><td>${esc(r.supplier)}</td><td class="r">${fmt(r.qty)}</td><td>${r.uom}</td><td>${none(r.needBy)}</td><td class="r">${r.received}</td>
+        <td>${nums(r)}</td><td>${nbs(r)}</td><td class="r">${sqs(r)}</td><td></td><td>${none()}</td><td>${esc(r.supplier)}</td><td class="r">${fmt(r.qty)}</td><td>${r.uom}</td><td>${none(r.needBy)}</td><td class="r">${r.received}</td>
         <td>${dateInp(`rd.${r.key}`)}</td>
         <td>${open > 0 ? `<span class="qr"><input class="inp ${E['qr.' + r.key] ? 'err' : ''}" data-qr="${esc(r.key)}" value="${esc(S.qr[r.key] || '')}"><label><input type="checkbox" class="native" data-qa="${esc(r.key)}" data-open="${open}" ${S.qr[r.key] == open && open ? 'checked' : ''}> All</label></span>` : '<span class="none">Received</span>'}</td>
         <td>${r.approval}</td><td class="c">${open > 0 ? `<span class="ico" data-tip="Detailed receipt" data-a="detail" data-k="${esc(r.key)}">${I.packageAdd}</span>` : ''}</td></tr>`; }).join('');
@@ -356,7 +357,7 @@
         <div class="c1bar alt"><span class="btn sm">Export to ▾</span><span class="sp"></span><span class="lbl">View</span><span class="sel" style="width:230px">All ${I.chev}</span><span class="btn sm" style="padding:0 7px">${I.clock}</span><span class="btn sm">Advanced</span><span class="srch" style="width:210px"><input placeholder="Search">${I.search}</span></div>
       </div>
       <div class="xwrap ${S.xp.receive ? 'expanded' : 'collapsed'}">${xToggle('receive')}
-        <table class="c1 grey"><thead><tr><th>ASN #</th><th>ASN Line</th><th>Item</th><th>PO Number</th><th>PO Line</th><th>PO Schedule Line #</th><th>Schedule Line Need By</th><th>Invoice</th><th>Invoice Line</th><th>Supplier</th><th class="r">ASN Quantity</th><th>UOM</th><th>PO Line Need By</th><th class="r">Received</th><th class="c">Receipt Date</th><th>Quick Receipts <input type="checkbox" class="native" data-a="qrAll"></th><th>Receipt approval required</th><th class="c">Actions</th></tr></thead><tbody>${body}</tbody></table>
+        <table class="c1 grey"><thead><tr><th>ASN #</th><th>ASN Line</th><th>Item</th><th>PO Number</th><th>PO Line</th><th>PO Schedule Line #</th><th>Schedule Line Need By</th><th class="r">Ship Quantity</th><th>Invoice</th><th>Invoice Line</th><th>Supplier</th><th class="r">ASN Quantity</th><th>UOM</th><th>PO Line Need By</th><th class="r">Received</th><th class="c">Receipt Date</th><th>Quick Receipts <input type="checkbox" class="native" data-a="qrAll"></th><th>Receipt approval required</th><th class="c">Actions</th></tr></thead><tbody>${body}</tbody></table>
       </div>
       <div class="c990 bot">${pager(2)}<div style="display:flex;justify-content:flex-end;gap:14px;align-items:center;margin-top:16px"><span class="lnk">Cancel</span><span class="btn" data-a="quickReceive">Receive</span></div></div>` + buyerFooter;
   }
@@ -412,8 +413,8 @@
         </div>
       </div>
       <div class="sect2">ASN Line</div>
-      <table class="c1 grey" style="border:1px solid #ddd"><thead><tr><th>ASN #</th><th>ASN Line</th><th>PO #</th><th>PO Line</th><th>PO Schedule Line #</th><th>Schedule Line Need By</th><th>Invoice</th><th>Invoice Line</th><th>Description</th><th>Supplier</th><th class="r">Shipped Qty</th><th>UOM</th><th class="r">Price</th><th class="r">PO Total</th><th>Need By</th><th class="r">Received</th></tr></thead>
-        <tbody><tr><td><span class="lnk">${esc(r.asn)}</span></td><td>${r.ln}</td><td><span class="lnk">${esc(r.po)}</span></td><td>${r.poLine}</td><td>${nums(r)}</td><td>${nbs(r)}</td><td></td><td></td><td>${esc(r.item)}</td><td>${esc(r.supplier)}</td><td class="r">${q1(r.qty)}</td><td>${r.uom}</td><td class="r">${money(r.price)}</td><td class="r">${money(r.price * r.qty)}</td><td>${none(r.needBy)}</td><td class="r">${q1(r.received)}</td></tr></tbody></table>
+      <table class="c1 grey" style="border:1px solid #ddd"><thead><tr><th>ASN #</th><th>ASN Line</th><th>PO #</th><th>PO Line</th><th>PO Schedule Line #</th><th>Schedule Line Need By</th><th class="r">Ship Quantity</th><th>Invoice</th><th>Invoice Line</th><th>Description</th><th>Supplier</th><th class="r">Shipped Qty</th><th>UOM</th><th class="r">Price</th><th class="r">PO Total</th><th>Need By</th><th class="r">Received</th></tr></thead>
+        <tbody><tr><td><span class="lnk">${esc(r.asn)}</span></td><td>${r.ln}</td><td><span class="lnk">${esc(r.po)}</span></td><td>${r.poLine}</td><td>${nums(r)}</td><td>${nbs(r)}</td><td class="r">${sqs(r)}</td><td></td><td></td><td>${esc(r.item)}</td><td>${esc(r.supplier)}</td><td class="r">${q1(r.qty)}</td><td>${r.uom}</td><td class="r">${money(r.price)}</td><td class="r">${money(r.price * r.qty)}</td><td>${none(r.needBy)}</td><td class="r">${q1(r.received)}</td></tr></tbody></table>
       <div class="sect2">Asset Tags (Optional)</div>
       <div class="assets"><div class="top"><div class="k" style="width:146px;text-align:right;font-weight:700;color:#3e5673">Asset Tags</div><div style="flex:1">You can enter asset tags manually below or use <span class="lnk">this CSV template</span>. The headers must be <i>asset tag, serial, owner,</i> and <i>note</i>. In each row, <i>asset tag</i> is required while the others are optional. Remember, the number of asset tags in the CSV file must be ${open} or fewer. <span class="lnk">Toggle manual entry.</span><div style="margin-top:6px">${file}</div></div></div>
         <div class="man"><div style="display:flex;gap:10px;align-items:flex-end">${['Tag', 'Serial Number', 'Owner', 'Note'].map((t, i) => `<div><div style="font-weight:700;color:#3e5673;margin-bottom:6px">${i === 0 ? '<input type="checkbox" class="native"> ' : ''}${t}</div><input class="inp" style="width:194px"></div>`).join('')}</div></div></div>
