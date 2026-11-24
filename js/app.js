@@ -173,14 +173,14 @@
         <div class="c-cb">${cbx(r.on, 'cardRow', `data-ref="${r.ref}"`, dis ? 'dis' : '')}</div>
         <div class="c-ref">${r.ref}${dis ? ' <span class="none">· Fully shipped</span>' : ''}</div><div class="c-qt">${fmt(r.qty)}</div>
         <div class="c-sh">${dis ? '' : `<input class="qinp ${c.err[r.ref] ? 'err' : ''}" data-f="cs.${r.ref}" value="${esc(r.ship)}" inputmode="decimal" title="${c.err[r.ref] ? esc(c.err[r.ref]) : `Open qty: ${r.open}`}">`}</div>
-        <div class="c-nb">${r.needBy}</div><div class="c-ini">${esc(r.by)}</div></div>`; }).join('');
+        <div class="c-nb">${r.needBy}</div></div>`; }).join('');
     return `<div class="sch-wrap">
       <div class="sch-card">
         <div class="sch-title">Delivery Schedules</div>
         <div class="sch-t">
-          <div class="sch-row sch-head"><div class="c-cb">${cbx(all, 'cardAll')}</div><div class="c-ref">Reference ID</div><div class="c-qt">Quantity</div><div class="c-sh">Shipped Qty</div><div class="c-nb">Need By Date</div><div class="c-ini">Initiated By</div><div class="c-g"></div></div>
+          <div class="sch-row sch-head"><div class="c-cb">${cbx(all, 'cardAll')}</div><div class="c-ref">Reference ID</div><div class="c-qt">Quantity</div><div class="c-sh hr">Shipped Qty</div><div class="c-nb">Need By Date</div><div class="c-g"></div></div>
           <div class="sch-body"><div class="sch-vp" data-vp="card-${l.id}">${body}</div><div class="sch-sb"><div class="th"></div></div></div>
-          <div class="sch-row sch-tot"><div class="c-cb"></div><div class="c-ref lab2"><span><b>Total</b> (All Schedules)</span></div><div class="c-qt"></div><div class="c-sh tv" id="cardtot">${fmt(cardTotal())}</div><div class="c-nb"></div><div class="c-ini"></div><div class="c-g"></div></div>
+          <div class="sch-row sch-tot"><div class="c-cb"></div><div class="c-ref lab2"><span><b>Total</b> schedules selected</span></div><div class="c-qt"></div><div class="c-sh tv" id="cardtot">${fmt(cardTotal())}</div><div class="c-nb"></div><div class="c-g"></div></div>
         </div>
       </div>
       <div class="sch-act"><span class="c2err">${c.err.rows || ''}</span><span class="sp"></span>

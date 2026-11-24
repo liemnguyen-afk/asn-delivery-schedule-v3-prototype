@@ -141,14 +141,13 @@ table.mt .cbcol { width: 20px; padding-right: 0; }
 .sch-row .c-qt { width: 100px; justify-content: flex-end; }
 .sch-row .c-sh { width: 150px; }
 .sch-row .c-nb { flex: 1; min-width: 150px; }
-.sch-row .c-ini { width: 170px; }
 .sch-wrap .sch-row > div { font-size: 14px; letter-spacing: .17px; color: #1b1f28; }
 .sch-wrap .sch-head > div { font-weight: 500; color: rgba(0, 0, 0, .87); }
 .sch-row.dim > div { color: #1b1f28; }
 .sch-row.done > div { color: #9aa3ad; }
-.sch-tot .lab2 { width: 250px; white-space: nowrap; overflow: visible; }
+.sch-tot .lab2 { white-space: nowrap; overflow: visible; position: relative; z-index: 1; }
 .sch-tot .lab2 b { font-weight: 600; }
-.sch-tot .tv { justify-content: flex-start; padding-left: 24px; }
+.sch-tot .tv, .sch-head .c-sh.hr { justify-content: flex-end; }
 .sch-row .c-sh .qinp { height: 36px; }
 .cbx.dis { opacity: .35; cursor: not-allowed; }
 .cbx.dis:hover { background: none; }
